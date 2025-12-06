@@ -22,7 +22,7 @@ cd smart-booking
 ##### Install dependencies
 
 ```
-Install dependencies
+composer install
 ```
 
 ##### Create .env File
