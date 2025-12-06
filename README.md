@@ -31,6 +31,13 @@ composer install
 cp .env.example .env
 ```
 
+##### generate app key
+
+```
+php artisan key:generate
+
+```
+
 ##### Set up database details in .env
 
 ```
