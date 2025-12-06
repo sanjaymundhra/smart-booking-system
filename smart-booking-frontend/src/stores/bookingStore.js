@@ -54,7 +54,6 @@ export const useBookingStore = defineStore("bookingStore", {
     async bookAppointment(payload) {
         this.errors = {};
         this.formMessage = "";
-        console.log('book appointment payload', payload)
         try {
             const res = await api.post("/bookings", payload);
             this.formMessage = res.data.message;
