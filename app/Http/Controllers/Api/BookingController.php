@@ -7,6 +7,7 @@ use App\Services\BookingAvailabilityService;
 use App\Http\Requests\BookingRequest;
 use App\Jobs\ProcessBookingJob;
 use App\Models\Booking;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
@@ -35,7 +36,7 @@ class BookingController extends Controller
     public function store(BookingRequest $request)
     {
         $data = $request->validated();
-        info('booking payload',$data);
+        Log::info('booking payload',$data);
         if (!$this->availabilityService->isSlotAvailable($data['date'], $data['start_time'], $data['service_id'])) {
             return response()->json([
                 'success' => false,

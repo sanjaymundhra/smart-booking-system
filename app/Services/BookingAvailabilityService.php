@@ -6,6 +6,7 @@ use App\Models\WorkingTime;
 use App\Models\Booking;
 use App\Models\Service;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class BookingAvailabilityService
 {
@@ -31,7 +32,7 @@ class BookingAvailabilityService
         if ($workingHours->isEmpty()) {
             return [];
         }
-        info('service Id', [$serviceId]);
+        Log::info('service Id', [$serviceId]);
         $service = Service::findOrFail($serviceId);
         $serviceDuration = $service->duration_minutes;
         
@@ -42,11 +43,11 @@ class BookingAvailabilityService
             ->pluck('time')
             ->toArray();
         
-        info('existing bookings', [$existingBookings]);
+        Log::info('existing bookings', [$existingBookings]);
         $availableSlots = [];
         
         foreach ($workingHours as $workingHour) {
-            info('$workingHour->slot_interval_minutes', [$workingHour->slot_interval_minutes]);
+            Log::info('$workingHour->slot_interval_minutes', [$workingHour->slot_interval_minutes]);
             $slots = $this->generateSlots(
                 $workingHour->start_time,
                 $workingHour->end_time,
@@ -74,7 +75,7 @@ class BookingAvailabilityService
         $start = Carbon::parse($startTime);
         $end = Carbon::parse($endTime);
         $now = Carbon::now();
-        info('slot duration', [$slotDuration]);
+        Log::info('slot duration', [$slotDuration]);
         while ($start->copy()->addMinutes($serviceDuration) <= $end) {
             $slotTime = $start->format('H:i');
             $slotDateTime = $date->copy()->setTimeFromTimeString($slotTime);
@@ -113,7 +114,7 @@ class BookingAvailabilityService
             $bookedEnd = $bookedStart->copy()->addMinutes($duration);
 
             if ($start < $bookedEnd && $end > $bookedStart) {
-                info('when is it rejected', [$start, $bookedEnd, $end, $bookedStart]);
+                Log::info('when is it rejected', [$start, $bookedEnd, $end, $bookedStart]);
                 return false;
             }
         }

@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Mail\BookingConfirmedMail;
-
 class ProcessBookingJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
@@ -35,7 +34,7 @@ class ProcessBookingJob implements ShouldQueue
         )->pluck('time')->toArray();
 
         if (!in_array($data['start_time'], $availableSlots)) {
-            info('Slot not available for booking', [
+            Log::info('Slot not available for booking', [
                 'service_id' => $data['service_id'],
                 'date' => $data['date'],
                 'selected_slot' => $data['start_time'],
